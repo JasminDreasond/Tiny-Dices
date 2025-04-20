@@ -1,3 +1,3 @@
-import {} from '../dist/index.mjs';
+import TinyDice from '../dist/index.mjs';
 
-console.log();
+console.log(TinyDice);

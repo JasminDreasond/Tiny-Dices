@@ -1,3 +1,3 @@
-import {} from '../dist';
+import TinyDice from '../dist';
 
-console.log();
+console.log(TinyDice);
