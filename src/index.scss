@@ -1,0 +1,107 @@
+/* 
+ * Created by: Yasmin Seidel (JasminDreasond)
+ * Co-developed with: ChatGPT (OpenAI) as coding assistant
+*/
+.tiny-dice-body {
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .dice-area {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    perspective: 1200px;
+    margin: 30px 0px;
+  }
+
+  .dice-container,
+  .cube-wrapper,
+  .face {
+    width: 100px;
+    height: 100px;
+  }
+
+  .face::selection {
+    background: var(--dice-selection-bg);
+    color: var(--dice-selection-text);
+  }
+
+  .cube-wrapper {
+    position: absolute;
+    transform-style: preserve-3d;
+    animation: tinyDiceSpinCubeCustom 2s ease-in-out forwards;
+  }
+
+  .face {
+    position: absolute;
+    font-size: 2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+  }
+
+  .face:not(.face1) {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -ms-user-select: none !important;
+    cursor: default !important;
+  }
+
+  .face1 {
+    transform: rotateY(0deg) translateZ(50px);
+  }
+  .face2 {
+    transform: rotateY(90deg) translateZ(50px);
+  }
+  .face3 {
+    transform: rotateY(180deg) translateZ(50px);
+  }
+  .face4 {
+    transform: rotateY(-90deg) translateZ(50px);
+  }
+  .face5 {
+    transform: rotateX(90deg) translateZ(50px);
+  }
+  .face6 {
+    transform: rotateX(-90deg) translateZ(50px);
+  }
+
+  @keyframes tinyDiceSpinCube {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    100% {
+      transform: rotateX(1440deg) rotateY(2160deg);
+    }
+  }
+
+  @keyframes tinyDiceSpinCubeCustom {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    100% {
+      transform: rotateX(var(--rotX)) rotateY(var(--rotY));
+    }
+  }
+
+  .cube-wrapper.spin-infinite {
+    animation: tinyDiceSpinCubeInfinite 4s linear infinite !important;
+  }
+
+  @keyframes tinyDiceSpinCubeInfinite {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    100% {
+      transform: rotateX(var(--rotX)) rotateY(var(--rotY));
+    }
+  }
+}
