@@ -558,7 +558,7 @@ class TinyDice {
           .trim()
           .split(',')
           .map((val) => parseInt(val.trim(), 10))
-          .filter((n) => !Number.isNaN(n) && n > 0)
+          .filter((n) => !Number.isNaN(n))
       : Array.isArray(perDieValues)
         ? perDieValues
         : [];
@@ -664,6 +664,7 @@ class TinyDice {
           else roll = max;
 
           // Insert sequence
+          if (roll < 1) roll = 0;
           sequence.push(roll);
           countSeq.add(roll);
           face.textContent = roll;
