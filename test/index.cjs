@@ -1,3 +1,3 @@
-const { } = require('../dist/index.cjs');
+const {} = require('../dist/index.cjs');
 
 console.log();

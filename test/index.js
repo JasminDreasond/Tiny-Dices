@@ -1,3 +1,3 @@
-import { } from '../dist';
+import {} from '../dist';
 
 console.log();

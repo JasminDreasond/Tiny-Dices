@@ -16,7 +16,8 @@
   "author": "Yasmin Seidel (JasminDreasond)",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "tiny-essentials": "^1.0.0"
+    "tiny-essentials": "^1.0.0",
+    "validate-color": "^2.2.4"
   },
   "keywords": [],
   "scripts": {
