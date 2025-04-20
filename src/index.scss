@@ -31,10 +31,19 @@
     color: var(--dice-selection-text);
   }
 
+  :root {
+    --cube-spin-duration: 2s;
+  }
+
   .cube-wrapper {
     position: absolute;
     transform-style: preserve-3d;
-    animation: tinyDiceSpinCubeCustom 2s ease-in-out forwards;
+    animation: tinyDiceSpinCubeCustom var(--cube-spin-duration) ease-in-out forwards;
+  }
+
+  .cube-wrapper,
+  .face {
+    will-change: transform;
   }
 
   .face {

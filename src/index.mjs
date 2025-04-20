@@ -627,7 +627,7 @@ class TinyDice {
       const rotY = 360 * (3 + Math.floor(Math.random() * 5));
 
       // Wrapper animation
-      wrapper.style.animation = `spinCubeCustom 2s ease-in-out forwards`;
+      wrapper.style.animation = `tinyDiceSpinCubeCustom 2s ease-in-out forwards`;
       wrapper.style.setProperty('--rotX', `${rotX}deg`);
       wrapper.style.setProperty('--rotY', `${rotY}deg`);
 
