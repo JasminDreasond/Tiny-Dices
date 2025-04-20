@@ -107,7 +107,7 @@ Remember to check out the **[Tiny Dice Docs](./docs/README.md)** for more detail
 
 ### 📣 Credits
 
-This project was created by **Yasmin Seidel (JasminDreasond)** with some **extra help** from **ChatGPT**. Big thanks to everyone contributing to the open-source community! 💖
+This project was created by **Yasmin Seidel (JasminDreasond)** with some **extra help** from **ChatGPT**. Tiny thanks to everyone contributing to the open-source community! 💖
 
 ---
 
