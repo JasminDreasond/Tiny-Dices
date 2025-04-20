@@ -21,29 +21,35 @@ Welcome to **Tiny Dice**! This JavaScript library is here to bring an extra laye
 
 2. **Roll Some Dice:**
 
-   - Roll 3 six-sided dice:
+  - 🎲 Roll 3 six-sided dice:
 
-     ```js
-     dice.roll(6, 3); // Rolls 3d6 🎲🎲🎲
-     ```
+    ```js
+    dice.roll('7,7,7'); // Rolls 3d7 🎲🎲🎲
+    ```
 
-   - Roll a mix of dice:
+  - 🎯 Roll a mix of dice:
 
-     ```js
-     dice.roll(100, 3, '6,12,20'); // Rolls d6, d12, and d20 🎲🎲🎲
-     ```
+    ```js
+    dice.roll('6,12,20'); // Rolls d6, d12, and d20 🔢🎲
+    ```
 
-   - Roll with infinite spin:
+  - 🔄 Roll with infinite spinning animation:
 
-     ```js
-     dice.roll(10, 2, null, true); // Rolls 2d10 with infinite spinning 🔄🎲
-     ```
+    ```js
+    dice.roll([10, 10], false, true); // Rolls 2d10 with infinite spin 🔄🎲
+    ```
 
-   - Roll starting from 0:
+  - 🧮 Roll with values starting from 0:
 
-     ```js
-     dice.roll(10, 2, null, false, true); // Rolls 2d10 starting at 0 🥳🎲
-     ```
+    ```js
+    dice.roll([10, 10], true); // Rolls 2d10 starting from 0 🥳🎲
+    ```
+
+  - 🧪 Roll a custom set of dice with zero and infinity:
+
+    ```js
+    dice.roll([4, 8, 6], true, true); // Rolls d4, d8, and d6 from 0 with infinite spin ⚙️🎲
+    ```
 
 ### Customization 🎨
 
@@ -70,7 +76,6 @@ Feel free to customize the appearance of your dice with different skins:
   dice.getTextSkin(); // Returns current text skin 🖋️
   dice.getBorderSkin(); // Returns current border skin ⚡
   ```
-
 
 ---
 

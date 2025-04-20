@@ -18,10 +18,11 @@ import validateColor from 'validate-color';
  * const container = document.getElementById('myDice');
  * const dice = new TinyDice(container);
  *
- * dice.roll(6, 3);                        // Rolls 3d6
- * dice.roll(100, 3, '6,12,20');           // Rolls d6, d12, and d20
- * dice.roll(10, 2, null, true);           // Rolls 2d10 with infinite spin
- * dice.roll(10, 2, null, false, true);    // Rolls 2d10 with values starting at 0
+ * dice.roll('7,7,7');                    // Rolls 3d6
+ * dice.roll('6,12,20');                 // Rolls d6, d12, and d20
+ * dice.roll([10, 10], false, true);     // Rolls 2d10 with infinite spin
+ * dice.roll([10, 10], true);            // Rolls 2d10 starting from 0
+ * dice.roll([4, 8, 6], true, true);     // Rolls d4, d8, and d6 from 0 with infinite spin
  *
  * Customization:
  * dice.setBgSkin('metal');                // Sets background skin
@@ -507,6 +508,14 @@ class TinyDice {
    * @returns {number} A random integer between 1 and max, or 0 and max if `canZero` is true. Returns 0 if max <= 0.
    */
   #rollNumber(max = 0, canZero = false) {
+    // Throw an error if the value is not a valid number
+    if (typeof max !== 'number' || Number.isNaN(max)) {
+      throw new Error(
+        `Invalid die max value at index ${i}: ${max}. All values must be positive numbers.`,
+      );
+    }
+
+    // Valid number
     if (max > 0) {
       let maxValue = max;
       let finalValue = 1;
@@ -539,30 +548,20 @@ class TinyDice {
   /**
    * Parses input parameters to determine the dice configuration.
    *
-   * @param {number} maxValue - Default maximum value for all dice (used when perDieValues is not provided).
-   * @param {number} diceCount - How many dice to roll.
    * @param {string|Array<number>} perDieValues - Optional: a comma-separated string or array of individual max values.
-   * @returns {{ count: number, maxGlobal: number, perDieData: number[] }} - Parsed dice configuration.
+   * @returns {number[]} - Parsed dice configuration.
    */
-  getRollConfig(maxValue = 0, diceCount = 0, perDieValues = '') {
-    // Get count
-    const count = typeof diceCount === 'number' ? diceCount : 1;
-    const maxGlobal = typeof maxValue === 'number' ? maxValue : 100;
-
+  parseRollConfig(perDieValues = '') {
     // Get per die data
-    const perDieData =
-      typeof perDieValues === 'string' && perDieValues.length > 0
+    return typeof perDieValues === 'string' && perDieValues.length > 0
+      ? perDieValues
+          .trim()
+          .split(',')
+          .map((val) => parseInt(val.trim(), 10))
+          .filter((n) => !Number.isNaN(n) && n > 0)
+      : Array.isArray(perDieValues)
         ? perDieValues
-            .trim()
-            .split(',')
-            .map((val) => parseInt(val.trim(), 10))
-            .filter((n) => !Number.isNaN(n) && n > 0)
-        : Array.isArray(perDieValues)
-          ? perDieValues
-          : [];
-
-    // Complete
-    return { count, maxGlobal, perDieData };
+        : [];
   }
 
   /**
@@ -713,18 +712,15 @@ class TinyDice {
   /**
    * Inserts multiple dice cubes into the DOM using the specified configuration.
    *
-   * @param {number} count - Number of dice to insert.
-   * @param {number} maxGlobal - Default maximum value for dice (if no individual values are given).
-   * @param {number[]} perDieData - Optional: Array of individual max values per die.
+   * @param {number[]} perDieData - Array of individual max values per die.
    * @param {boolean} [canZero=false] - Whether 0 is a valid result on any die.
    * @param {boolean} [rollInfinity=false] - Whether all dice should spin infinitely.
    * @returns {Array<{ result: number, sequence: number[] }>} - Array with results and face sequences for each die.
    */
-  rollDices(count, maxGlobal, perDieData, canZero = false, rollInfinity = undefined) {
+  rollDices(perDieData, canZero = false, rollInfinity = false) {
     const cubes = [];
-    for (let i = 0; i < count; i++) {
-      const max =
-        Array.isArray(perDieData) && typeof perDieData[i] === 'number' ? perDieData[i] : maxGlobal;
+    for (let i = 0; i < perDieData.length; i++) {
+      const max = perDieData[i];
       const result = this.#rollNumber(max, canZero);
       cubes.push({
         sequence: this.insertDiceElement(result, max, canZero, rollInfinity),
@@ -737,17 +733,15 @@ class TinyDice {
   /**
    * Rolls the dice by clearing existing cubes and inserting new ones.
    *
-   * @param {number} maxValue - Default maximum value for all dice (used if perDieValues is not provided).
-   * @param {number} diceCount - How many dice to roll.
-   * @param {string|Array<number>} [perDieValues] - Optional: comma-separated string or array of individual max values.
+   * @param {string|Array<number>} perDieInput - Either a comma-separated string or array of max values per die.
    * @param {boolean} [canZero=false] - Whether 0 is a valid result.
    * @param {boolean} [rollInfinity=false] - Whether dice spin infinitely.
    * @returns {Array<{ result: number, sequence: number[] }>} - Array with results and face sequences for each die.
    */
-  roll(maxValue, diceCount, perDieValues, canZero, rollInfinity) {
-    const { count, maxGlobal, perDieData } = this.getRollConfig(maxValue, diceCount, perDieValues);
+  roll(perDieInput, canZero = false, rollInfinity = false) {
+    const perDieData = this.parseRollConfig(perDieInput);
     this.clearDiceArea();
-    return this.rollDices(count, maxGlobal, perDieData, canZero, rollInfinity);
+    return this.rollDices(perDieData, canZero, rollInfinity);
   }
 }
 
