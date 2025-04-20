@@ -55,19 +55,19 @@ Welcome to **Tiny Dice**! This JavaScript library is here to bring an extra laye
 
 Feel free to customize the appearance of your dice with different skins:
 
-- **Background Skin:** Set a cool background like 'metal', 'wood', or something magical! ✨
+- **Background Skin:** Set a cool background with solid colors like `'gray'`, `'blue'`, or `'green'`, or something magical! ✨
   ```js
-  dice.setBgSkin('metal'); // Sets background skin to metal 🛠️
+  dice.setBgSkin('gray'); // Sets background skin to gray 🌫️
   ```
 
-- **Text Skin:** Make your dice text stand out with skins like 'neon' or 'glow'! 💡
+- **Text Skin:** Make your dice text stand out with solid color skins like `'red'`, `'yellow'`, or `'white'`! 🌟
   ```js
-  dice.setTextSkin('neon'); // Makes the text glow! 💚
+  dice.setTextSkin('red'); // Makes the text red 🔴
   ```
 
-- **Border Skin:** Add a border effect to your dice, such as a glowing border! ✨
+- **Border Skin:** Add a border effect to your dice with colors like `'black'`, `'orange'`, or `'purple'`! ✨
   ```js
-  dice.setBorderSkin('2px solid glow'); // Sets a glowing border ✨
+  dice.setBorderSkin('2px solid black'); // Sets a black border ⚫
   ```
 
 - **Get Current Skins:** Check what skins you're using right now:

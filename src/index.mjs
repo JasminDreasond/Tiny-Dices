@@ -25,9 +25,9 @@ import validateColor from 'validate-color';
  * dice.roll([4, 8, 6], true, true);     // Rolls d4, d8, and d6 from 0 with infinite spin
  *
  * Customization:
- * dice.setBgSkin('metal');                // Sets background skin
- * dice.setTextSkin('neon');               // Sets text skin
- * dice.setBorderSkin('2px solid glow');   // Sets border skin
+ * dice.setBgSkin('gray');                // Sets background skin to gray
+ * dice.setTextSkin('red');               // Sets text skin to red
+ * dice.setBorderSkin('2px solid black'); // Sets border skin to black
  *
  * dice.getBgSkin();                       // Gets current or default background skin
  * dice.getTextSkin();                     // Gets current or default text skin
