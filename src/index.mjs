@@ -557,8 +557,17 @@ class TinyDice {
       ? perDieValues
           .trim()
           .split(',')
-          .map((val) => parseInt(val.trim(), 10))
-          .filter((n) => !Number.isNaN(n))
+          .map((raw) => {
+            let val = 0;
+            try {
+              val = parseInt(raw.trim(), 10);
+            } catch {
+              val = 0;
+            }
+            if (typeof val === 'number' && !Number.isNaN(val) && Number.isFinite(val) && val > -1)
+              return val;
+            return -1;
+          })
       : Array.isArray(perDieValues)
         ? perDieValues
         : [];
