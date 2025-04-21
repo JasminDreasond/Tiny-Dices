@@ -36,6 +36,9 @@ You can use Tiny Dices in the browser or with Node.js. Choose your favorite styl
 Include the script in your HTML and start rolling:
 
 ```html
+<!-- Include Tiny Dices stylesheet -->
+<link rel="stylesheet" href="/node_modules/tiny-dices/dist/TinyDices.min.css">
+
 <!-- Include Tiny Dices script -->
 <script src="/node_modules/tiny-dices/dist/TinyDices.min.js"></script>
 
