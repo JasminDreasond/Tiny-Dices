@@ -19,7 +19,21 @@
     "tiny-essentials": "^1.0.0",
     "validate-color": "^2.2.4"
   },
-  "keywords": [],
+  "keywords": [
+    "dice-roller",
+    "virtual-dice",
+    "dice",
+    "randomizer",
+    "js-dice",
+    "css",
+    "html5",
+    "customizable",
+    "tabletop",
+    "rpg",
+    "game-tools",
+    "dice-for-rpg",
+    "fun"
+  ],
   "scripts": {
     "test": "npm run test:mjs && npm run test:cjs && npm run test:js",
     "test:js": "npx babel-node test/index.js",
