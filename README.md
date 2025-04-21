@@ -1,3 +1,16 @@
+<div align="center">
+<p>
+    <a href="https://discord.gg/TgHdvJd"><img src="https://img.shields.io/discord/413193536188579841?color=7289da&logo=discord&logoColor=white" alt="Discord server" /></a>
+    <a href="https://www.npmjs.com/package/tiny-dice"><img src="https://img.shields.io/npm/v/tiny-dice.svg?maxAge=3600" alt="NPM version" /></a>
+    <a href="https://www.npmjs.com/package/tiny-dice"><img src="https://img.shields.io/npm/dt/tiny-dice.svg?maxAge=3600" alt="NPM downloads" /></a>
+    <a href="https://www.patreon.com/JasminDreasond"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg?logo=patreon" alt="Patreon" /></a>
+    <a href="https://ko-fi.com/jasmindreasond"><img src="https://img.shields.io/badge/donate-ko%20fi-29ABE0.svg?logo=ko-fi" alt="Ko-Fi" /></a>
+</p>
+<p>
+    <a href="https://nodei.co/npm/tiny-dice/"><img src="https://nodei.co/npm/tiny-dice.png?downloads=true&stars=true" alt="npm installnfo" /></a>
+</p>
+</div>
+
 # 🎲 Tiny Dice - Fun 3D Dice Rolling with JavaScript
 
 Welcome to **Tiny Dice**! This JavaScript library is here to bring an extra layer of fun and magic to your dice-rolling experience. ✨ Whether you're rolling for your favorite tabletop RPG or just need some virtual dice to shake things up, TinyDice makes it all possible with style!

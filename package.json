@@ -1,5 +1,5 @@
 {
-  "name": "tinydice",
+  "name": "tiny-dice",
   "description": "Tiny Dice adds a sprinkle of fun and a touch of magic to your dice-rolling adventures — fully customizable with CSS and JavaScript to match your style, theme, or imagination! 🎲✨",
   "version": "1.0.0",
   "main": "./dist/index.cjs",
