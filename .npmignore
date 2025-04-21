@@ -1,6 +1,4 @@
 # Remove original repository data
-docs
-build
 src
 test
 .babelrc

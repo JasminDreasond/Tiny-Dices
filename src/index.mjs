@@ -105,7 +105,7 @@ class TinyDices {
     else this.#insertCreateCube();
     if (diceBase && diceBase instanceof HTMLElement) {
       this.#diceBase = diceBase;
-      this.#diceBase.classList.add('tiny-dice-body');
+      this.#diceBase.classList.add('tiny-dices-body');
 
       this.diceArea = document.createElement('div');
       this.diceArea.classList.add('dice-area');
