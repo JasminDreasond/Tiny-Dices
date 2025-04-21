@@ -1,4 +1,4 @@
-# 🎲 Tiny Dice
+# 🎲 Tiny Dice API Documentation
 
 **Tiny Dice** is a lightweight and fully customizable dice roller built for the web.  
 It brings fun, magic, and a touch of flair to any dice-based experience—whether you're building a tabletop RPG interface, adding flair to a browser game, or just rolling dice for the joy of it! ✨
@@ -65,3 +65,77 @@ dice.roll([4, 8, 20]);
 ```
 
 > This version assumes you're using a bundler like Vite, Webpack, or directly with Node.js ESM.
+
+---
+
+### 🧱 Constructor
+
+```js
+const dice = new TinyDice(containerElement);
+```
+
+| Param            | Type      | Description                          |
+|------------------|-----------|--------------------------------------|
+| `containerElement` | `HTMLElement` | DOM element where dice will be rendered. Required. |
+
+---
+
+### 🎲 `roll(perDieInput, canZero = false, rollInfinity = false)`
+
+Rolls one or more dice using custom face values.
+
+```js
+dice.roll('6,8,10');         // Rolls d6, d8 and d10
+dice.roll([4, 12], true);    // Rolls d4 and d12, allowing 0
+```
+
+| Param          | Type                 | Description |
+|----------------|----------------------|-------------|
+| `perDieInput`  | `string` or `number[]` | Comma-separated string or array of die max values. |
+| `canZero`      | `boolean`            | Allow 0 as minimum roll value (default: `false`). |
+| `rollInfinity` | `boolean`            | Enable infinite spinning animation (default: `false`). |
+
+Returns: `Array<{ result: number, sequence: number[] }>` — Result per die.
+
+---
+
+### ♻️ `destroy()`
+
+Destroys all internal HTML and resets the dice system.
+
+```js
+dice.destroy();
+```
+
+This method:
+- Clears all rendered dice
+- Resets all skins and configuration
+- Marks the instance as destroyed
+
+---
+
+### ❌ `isDestroyed()`
+
+Checks if the instance has been destroyed.
+
+```js
+if (dice.isDestroyed()) {
+  console.warn('This instance has been destroyed!');
+}
+```
+
+Returns: `boolean`
+
+---
+
+### 💡 `existsHtml()`
+
+Checks if the internal HTML structure still exists in the DOM.
+
+```js
+if (!dice.existsHtml()) {
+  console.warn('The dice container is missing!');
+}
+```
+
+Returns: `boolean`

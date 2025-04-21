@@ -161,7 +161,14 @@ class TinyDice {
    * @returns {boolean} `true` if the item was valid and added; otherwise, `false`.
    */
   #addElement(item) {
-    if (objType(item, 'object') && Array.isArray(item.faces) && item.container && item.wrapper) {
+    if (
+      objType(item, 'object') &&
+      Array.isArray(item.faces) &&
+      item.container &&
+      item.container instanceof HTMLElement &&
+      item.wrapper &&
+      item.wrapper instanceof HTMLElement
+    ) {
       this.#elements.push(item);
       return true;
     }
