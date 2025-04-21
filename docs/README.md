@@ -1,6 +1,6 @@
-# 🎲 Tiny Dice API Documentation
+# 🎲 Tiny Dices API Documentation
 
-**Tiny Dice** is a lightweight and fully customizable dice roller built for the web.  
+**Tiny Dices** is a lightweight and fully customizable dice roller built for the web.  
 It brings fun, magic, and a touch of flair to any dice-based experience—whether you're building a tabletop RPG interface, adding flair to a browser game, or just rolling dice for the joy of it! ✨
 
 ## 📚 Documentation Menu
@@ -16,7 +16,7 @@ It brings fun, magic, and a touch of flair to any dice-based experience—whethe
 
 ---
 
-### 🧩 What makes Tiny Dice special?
+### 🧩 What makes Tiny Dices special?
 
 - 🔧 **Customizable** – Every visual aspect of the dice can be themed using CSS or controlled via JavaScript.
 - 🎨 **Animated** – Dice come to life with smooth, animated rolls and optional infinite spin.
@@ -27,7 +27,7 @@ It brings fun, magic, and a touch of flair to any dice-based experience—whethe
 
 ## 🚀 Quick Start
 
-You can use Tiny Dice in the browser or with Node.js. Choose your favorite style!
+You can use Tiny Dices in the browser or with Node.js. Choose your favorite style!
 
 ---
 
@@ -36,8 +36,8 @@ You can use Tiny Dice in the browser or with Node.js. Choose your favorite style
 Include the script in your HTML and start rolling:
 
 ```html
-<!-- Include Tiny Dice script -->
-<script src="/node_modules/tiny-dice/dist/TinyDice.min.js"></script>
+<!-- Include Tiny Dices script -->
+<script src="/node_modules/tiny-dices/dist/TinyDice.min.js"></script>
 
 <!-- Create a div element to hold the dice -->
 <div id="dice-area"></div>
@@ -63,13 +63,13 @@ Include the script in your HTML and start rolling:
 Install via npm:
 
 ```bash
-npm install tiny-dice
+npm install tiny-dices
 ```
 
 Then use it in your JavaScript:
 
 ```js
-import TinyDice from 'tiny-dice';
+import TinyDice from 'tiny-dices';
 
 const dice = new TinyDice();
 

@@ -1,19 +1,19 @@
 <div align="center">
 <p>
     <a href="https://discord.gg/TgHdvJd"><img src="https://img.shields.io/discord/413193536188579841?color=7289da&logo=discord&logoColor=white" alt="Discord server" /></a>
-    <a href="https://www.npmjs.com/package/tiny-dice"><img src="https://img.shields.io/npm/v/tiny-dice.svg?maxAge=3600" alt="NPM version" /></a>
-    <a href="https://www.npmjs.com/package/tiny-dice"><img src="https://img.shields.io/npm/dt/tiny-dice.svg?maxAge=3600" alt="NPM downloads" /></a>
+    <a href="https://www.npmjs.com/package/tiny-dices"><img src="https://img.shields.io/npm/v/tiny-dices.svg?maxAge=3600" alt="NPM version" /></a>
+    <a href="https://www.npmjs.com/package/tiny-dices"><img src="https://img.shields.io/npm/dt/tiny-dices.svg?maxAge=3600" alt="NPM downloads" /></a>
     <a href="https://www.patreon.com/JasminDreasond"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg?logo=patreon" alt="Patreon" /></a>
     <a href="https://ko-fi.com/jasmindreasond"><img src="https://img.shields.io/badge/donate-ko%20fi-29ABE0.svg?logo=ko-fi" alt="Ko-Fi" /></a>
 </p>
 <p>
-    <a href="https://nodei.co/npm/tiny-dice/"><img src="https://nodei.co/npm/tiny-dice.png?downloads=true&stars=true" alt="npm installnfo" /></a>
+    <a href="https://nodei.co/npm/tiny-dices/"><img src="https://nodei.co/npm/tiny-dices.png?downloads=true&stars=true" alt="npm installnfo" /></a>
 </p>
 </div>
 
-# 🎲 Tiny Dice - Fun 3D Dice Rolling with JavaScript
+# 🎲 Tiny Dices - Fun 3D Dice Rolling with JavaScript
 
-Welcome to **Tiny Dice**! This JavaScript library is here to bring an extra layer of fun and magic to your dice-rolling experience. ✨ Whether you're rolling for your favorite tabletop RPG or just need some virtual dice to shake things up, TinyDice makes it all possible with style!
+Welcome to **Tiny Dices**! This JavaScript library is here to bring an extra layer of fun and magic to your dice-rolling experience. ✨ Whether you're rolling for your favorite tabletop RPG or just need some virtual dice to shake things up, TinyDice makes it all possible with style!
 
 ### Inspiration ✨
 
@@ -98,7 +98,7 @@ Feel free to customize the appearance of your dice with different skins:
 
 ### 💻 How It Works
 
-Tiny Dice works by creating a customizable, **3D cube** with **6 animated faces**. Every time you roll, the faces spin and reveal random numbers. 🎲✨
+Tiny Dices works by creating a customizable, **3D cube** with **6 animated faces**. Every time you roll, the faces spin and reveal random numbers. 🎲✨
 
 - **The front face** shows the result of your roll 🥳
 - **The other faces** are randomized, creating a truly unique dice experience!
@@ -109,7 +109,7 @@ You can also customize the cube's animation. Want it to spin forever? Or just do
 
 ### 🎨 Styles & Animations
 
-Tiny Dice comes with cool animation effects and customizable styles. From **spin effects** to **face transformations**, the dice will roll in style. ✨
+Tiny Dices comes with cool animation effects and customizable styles. From **spin effects** to **face transformations**, the dice will roll in style. ✨
 
 - **Spin it Infinite!**: Watch the dice spin forever for an endless feeling of anticipation! 🔄
 - **Spin it Custom**: You can control how the dice rotate with custom animations. Rotate along different axes for the coolest effects! 🔮
@@ -118,7 +118,7 @@ Tiny Dice comes with cool animation effects and customizable styles. From **spin
 
 ### 🚨 Don't Forget
 
-Remember to check out the **[Tiny Dice Docs](./docs/README.md)** for more detailed instructions and advanced features! 📝
+Remember to check out the **[Tiny Dices Docs](./docs/README.md)** for more detailed instructions and advanced features! 📝
 
 ---
 
