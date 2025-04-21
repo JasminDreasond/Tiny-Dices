@@ -155,3 +155,15 @@ if (!dice.existsHtml()) {
 ```
 
 Returns: `boolean`
+
+---
+
+### 📷 With Default Dice Appearance
+
+![Default dice 1](./examples/2025-04-21_11-17_1.jpg)
+![Default dice 2](./examples/2025-04-21_11-17.jpg)
+
+### 🎨 Custom Dice Example 1
+
+![Custom dice 1](../img/examples/2025-04-21_11-16.jpg)
+![Custom dice 1](../img/examples/2025-04-21_11-18.jpg)
