@@ -15,6 +15,10 @@
 
 Welcome to **Tiny Dice**! This JavaScript library is here to bring an extra layer of fun and magic to your dice-rolling experience. ✨ Whether you're rolling for your favorite tabletop RPG or just need some virtual dice to shake things up, TinyDice makes it all possible with style!
 
+### Inspiration ✨
+
+This project was initially a custom dice application from Pony Driland repository. The tiny dice eventually evolved during the development that resulted in this project that is now published by the same creator of the Pony Driland repository.
+
 ### Features 🌟
 
 - **Roll any number of dice** – from a single die to a whole set of them! 🎲
