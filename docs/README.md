@@ -3,6 +3,19 @@
 **Tiny Dice** is a lightweight and fully customizable dice roller built for the web.  
 It brings fun, magic, and a touch of flair to any dice-based experience—whether you're building a tabletop RPG interface, adding flair to a browser game, or just rolling dice for the joy of it! ✨
 
+## 📚 Documentation Menu
+
+### 🎲 Dice Behavior
+- [roll.md](./roll.md) – Dice rolling logic, options, and return data
+
+### 🛠 Customization
+- [custom.md](./custom.md) – Customizing dice appearance and behavior
+
+### 👩‍💻 Developer Reference
+- [dev.md](./dev.md) – Internal structure, private methods, and advanced usage
+
+---
+
 ### 🧩 What makes Tiny Dice special?
 
 - 🔧 **Customizable** – Every visual aspect of the dice can be themed using CSS or controlled via JavaScript.
