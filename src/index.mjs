@@ -48,6 +48,7 @@ class TinyDice {
   #textSkin;
   #borderSkin;
   #diceBase;
+  #destroyed = false;
 
   /**
    * Creates a cube DOM element with animated faces and randomized values.
@@ -99,17 +100,39 @@ class TinyDice {
    *
    *
    */
-  constructor(diceBase, createCubeScript = null) {
+  constructor(diceBase = null, createCubeScript = null) {
     if (typeof createCubeScript === 'function') this.#createCube = createCubeScript;
     else this.#insertCreateCube();
+    if (diceBase && diceBase instanceof HTMLElement) {
+      this.#diceBase = diceBase;
+      this.#diceBase.classList.add('tiny-dice-body');
 
-    this.#diceBase = diceBase;
-    this.#diceBase.classList.add('tiny-dice-body');
+      this.diceArea = document.createElement('div');
+      this.diceArea.classList.add('dice-area');
 
-    this.diceArea = document.createElement('div');
-    this.diceArea.classList.add('dice-area');
+      this.#diceBase.appendChild(this.diceArea);
+    }
+  }
 
-    this.#diceBase.appendChild(this.diceArea);
+  /**
+   * @private
+   * Internal helper to check if the dice base element is a valid HTMLElement.
+   *
+   * @returns {boolean} - True if #diceBase is a valid HTMLElement.
+   */
+  #existsHtml() {
+    return this.#diceBase && this.#diceBase instanceof HTMLElement;
+  }
+
+  /**
+   * Checks if the internal HTML structure (dice base container) still exists in the DOM.
+   *
+   * Useful to verify if the TinyDice component is still rendered and operational.
+   *
+   * @returns {boolean} - Returns `true` if the HTML elements exist, otherwise `false`.
+   */
+  existsHtml() {
+    return this.#existsHtml();
   }
 
   /**
@@ -594,7 +617,7 @@ class TinyDice {
    */
   clearDiceArea() {
     this.#cubeId = 0;
-    this.diceArea.innerHTML = '';
+    if (this.#existsHtml()) this.diceArea.innerHTML = '';
     this.#elements = [];
   }
 
@@ -712,11 +735,10 @@ class TinyDice {
    * @returns {{ result: number, sequence: number[] }} - Array with results and face sequences for each die.
    */
   rollDice(max, canZero = false, rollInfinity = undefined) {
-    const result = this.#rollNumber(max, canZero);
-    return {
-      sequence: this.insertDiceElement(result, max, canZero, rollInfinity),
-      result,
-    };
+    const cube = { result: this.#rollNumber(max, canZero) };
+    if (this.#existsHtml())
+      cube.sequece = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+    return cube;
   }
 
   /**
@@ -731,11 +753,10 @@ class TinyDice {
     const cubes = [];
     for (let i = 0; i < perDieData.length; i++) {
       const max = perDieData[i];
-      const result = this.#rollNumber(max, canZero);
-      cubes.push({
-        sequence: this.insertDiceElement(result, max, canZero, rollInfinity),
-        result,
-      });
+      const cube = { result: this.#rollNumber(max, canZero) };
+      if (this.#existsHtml())
+        cube.sequece = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+      cubes.push(cube);
     }
     return cubes;
   }
@@ -752,6 +773,64 @@ class TinyDice {
     const perDieData = this.parseRollConfig(perDieInput);
     this.clearDiceArea();
     return this.rollDices(perDieData, canZero, rollInfinity);
+  }
+
+  /**
+   * Checks whether the TinyDice instance has been destroyed.
+   *
+   * @returns {boolean} - Returns `true` if the instance was destroyed, otherwise `false`.
+   *
+   * @example
+   * if (dice.isDestroyed()) {
+   *   console.warn('This instance is no longer usable.');
+   * }
+   */
+  isDestroyed() {
+    return this.#destroyed;
+  }
+
+  /**
+   * Completely destroys the TinyDice instance by removing DOM elements and resetting internal state.
+   *
+   * This method:
+   * - Clears all rendered dice.
+   * - Empties the base DOM elements (container, diceBase, diceArea).
+   * - Resets all visual skin configurations.
+   * - Nullifies DOM references.
+   * - Sets an internal flag to block further usage of the instance.
+   *
+   * @example
+   * dice.destroy(); // 💣 Cleans up everything and makes the instance unusable
+   */
+  destroy() {
+    // Clear any dice already rendered
+    this.clearDiceArea();
+
+    // Remove container element content (optional: comment if you want to preserve it)
+    if (this.container && this.container instanceof HTMLElement) this.container.innerHTML = '';
+    if (this.#diceBase && this.#diceBase instanceof HTMLElement) this.#diceBase.innerHTML = '';
+    if (this.diceArea && this.diceArea instanceof HTMLElement) this.diceArea.innerHTML = '';
+
+    // Optionally, unset the container reference
+    this.#diceBase = null;
+    this.diceArea = null;
+    this.container = null;
+
+    // Reset any styles or configs (if you store them in other properties, reset them here)
+    this.#defaultBgSkin = null;
+    this.#defaultBorderSkin = null;
+    this.#defaultSelectionTextSkin = null;
+    this.#defaultSelectionBgSkin = null;
+    this.#defaultTextSkin = null;
+    this.#selectionBgSkin = null;
+    this.#selectionTextSkin = null;
+    this.#bgSkin = null;
+    this.#bgImg = null;
+    this.#textSkin = null;
+    this.#borderSkin = null;
+
+    // Optionally, mark as destroyed to prevent further use
+    this.#destroyed = true;
   }
 }
 
