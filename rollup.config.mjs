@@ -48,9 +48,9 @@ export default [
   {
     input: 'src/index.mjs',
     output: {
-      file: 'dist/TinyDice.min.js',
+      file: 'dist/TinyDices.min.js',
       format: 'iife',
-      name: 'TinyDice',
+      name: 'TinyDices',
       sourcemap: false,
       globals: {
         'lodash': '_',

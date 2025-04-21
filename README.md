@@ -13,7 +13,7 @@
 
 # 🎲 Tiny Dices - Fun 3D Dice Rolling with JavaScript
 
-Welcome to **Tiny Dices**! This JavaScript library is here to bring an extra layer of fun and magic to your dice-rolling experience. ✨ Whether you're rolling for your favorite tabletop RPG or just need some virtual dice to shake things up, TinyDice makes it all possible with style!
+Welcome to **Tiny Dices**! This JavaScript library is here to bring an extra layer of fun and magic to your dice-rolling experience. ✨ Whether you're rolling for your favorite tabletop RPG or just need some virtual dice to shake things up, TinyDices makes it all possible with style!
 
 ### Inspiration ✨
 
@@ -33,7 +33,7 @@ This project was initially a custom dice application from Pony Driland repositor
 
    ```js
    const container = document.getElementById('myDice');
-   const dice = new TinyDice(container);
+   const dice = new TinyDices(container);
    ```
 
 2. **Roll Some Dice:**

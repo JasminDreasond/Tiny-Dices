@@ -37,14 +37,14 @@ Include the script in your HTML and start rolling:
 
 ```html
 <!-- Include Tiny Dices script -->
-<script src="/node_modules/tiny-dices/dist/TinyDice.min.js"></script>
+<script src="/node_modules/tiny-dices/dist/TinyDices.min.js"></script>
 
 <!-- Create a div element to hold the dice -->
 <div id="dice-area"></div>
 
 <script>
   // Set the container element where the dice will appear
-  const dice = new TinyDice(document.getElementById('dice-area'));
+  const dice = new TinyDices(document.getElementById('dice-area'));
 
   // Roll two six-sided dice
   dice.roll('6,6');
@@ -54,7 +54,7 @@ Include the script in your HTML and start rolling:
 </script>
 ```
 
-> Make sure `TinyDice.min.js` is accessible from your project path.
+> Make sure `TinyDices.min.js` is accessible from your project path.
 
 ---
 
@@ -69,9 +69,9 @@ npm install tiny-dices
 Then use it in your JavaScript:
 
 ```js
-import TinyDice from 'tiny-dices';
+import TinyDices from 'tiny-dices';
 
-const dice = new TinyDice();
+const dice = new TinyDices();
 
 // Roll a mix of dice: d4, d8, d20
 dice.roll([4, 8, 20]);
@@ -84,7 +84,7 @@ dice.roll([4, 8, 20]);
 ### 🧱 Constructor
 
 ```js
-const dice = new TinyDice(containerElement);
+const dice = new TinyDices(containerElement);
 ```
 
 | Param            | Type      | Description                          |

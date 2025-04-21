@@ -1,6 +1,6 @@
-import TinyDice from '../dist';
+import TinyDices from '../dist';
 
-const dice = new TinyDice();
+const dice = new TinyDices();
 console.log(dice);
 
 console.log(dice.roll('6'));

@@ -2,7 +2,7 @@ import { objType } from 'tiny-essentials';
 import validateColor from 'validate-color';
 
 /**
- * TinyDice - JavaScript class for rendering animated 3D dice with HTML/CSS.
+ * TinyDices - JavaScript class for rendering animated 3D dice with HTML/CSS.
  *
  * Created by: Yasmin Seidel (JasminDreasond)
  * Co-developed with: ChatGPT (OpenAI) as coding assistant
@@ -16,7 +16,7 @@ import validateColor from 'validate-color';
  *
  * Usage:
  * const container = document.getElementById('myDice');
- * const dice = new TinyDice(container);
+ * const dice = new TinyDices(container);
  *
  * dice.roll('7,7,7');                    // Rolls 3d6
  * dice.roll('6,12,20');                 // Rolls d6, d12, and d20
@@ -33,7 +33,7 @@ import validateColor from 'validate-color';
  * dice.getTextSkin();                     // Gets current or default text skin
  * dice.getBorderSkin();                   // Gets current or default border skin
  */
-class TinyDice {
+class TinyDices {
   #elements = [];
   #cubeId = 0; // used for incremental z-index to avoid overlapping issues
   #defaultBgSkin = 'linear-gradient(135deg, #ff3399, #33ccff)';
@@ -62,7 +62,7 @@ class TinyDice {
   #createCube;
 
   /**
-   * Creates a new TinyDice instance attached to a specified HTML element.
+   * Creates a new TinyDices instance attached to a specified HTML element.
    *
    * @param {HTMLElement} diceBase - The HTML container element where the dice will be rendered.
    * @param {function(number, number, boolean=, boolean=): {cube: HTMLElement, sequence: number[]}=} [createCubeScript=null]
@@ -127,7 +127,7 @@ class TinyDice {
   /**
    * Checks if the internal HTML structure (dice base container) still exists in the DOM.
    *
-   * Useful to verify if the TinyDice component is still rendered and operational.
+   * Useful to verify if the TinyDices component is still rendered and operational.
    *
    * @returns {boolean} - Returns `true` if the HTML elements exist, otherwise `false`.
    */
@@ -783,7 +783,7 @@ class TinyDice {
   }
 
   /**
-   * Checks whether the TinyDice instance has been destroyed.
+   * Checks whether the TinyDices instance has been destroyed.
    *
    * @returns {boolean} - Returns `true` if the instance was destroyed, otherwise `false`.
    *
@@ -797,7 +797,7 @@ class TinyDice {
   }
 
   /**
-   * Completely destroys the TinyDice instance by removing DOM elements and resetting internal state.
+   * Completely destroys the TinyDices instance by removing DOM elements and resetting internal state.
    *
    * This method:
    * - Clears all rendered dice.
@@ -841,4 +841,4 @@ class TinyDice {
   }
 }
 
-export default TinyDice;
+export default TinyDices;

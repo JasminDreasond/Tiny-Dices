@@ -1,6 +1,6 @@
-const TinyDice = require('../dist/index.cjs');
+const TinyDices = require('../dist/index.cjs');
 
-const dice = new TinyDice();
+const dice = new TinyDices();
 console.log(dice);
 
 console.log(dice.roll('6'));

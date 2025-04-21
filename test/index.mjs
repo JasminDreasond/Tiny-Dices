@@ -1,6 +1,6 @@
-import TinyDice from '../dist/index.mjs';
+import TinyDices from '../dist/index.mjs';
 
-const dice = new TinyDice();
+const dice = new TinyDices();
 console.log(dice);
 
 console.log(dice.roll('6'));

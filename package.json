@@ -1,7 +1,7 @@
 {
   "name": "tiny-dices",
   "description": "Tiny Dices adds a sprinkle of fun and a touch of magic to your dice-rolling adventures — fully customizable with CSS and JavaScript to match your style, theme, or imagination! 🎲✨",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -43,7 +43,7 @@
     "auto-build": "npm run build",
     "build": "npm run build:js && npm run build:css",
     "build:js": "tsc -p tsconfig.json && rollup -c",
-    "build:css": "sass src/index.scss dist/TinyDice.css --no-source-map && sass src/index.scss dist/TinyDice.min.css --no-source-map --style=compressed",
+    "build:css": "sass src/index.scss dist/TinyDices.css --no-source-map && sass src/index.scss dist/TinyDices.min.css --no-source-map --style=compressed",
     "build-clean": "npm run clean && npm run build",
     "build-dist": "npm run build",
     "clean": "rm -rf dist",
