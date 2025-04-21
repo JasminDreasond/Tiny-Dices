@@ -160,8 +160,8 @@ Returns: `boolean`
 
 ### 📷 With Default Dice Appearance
 
-![Default dice 1](./examples/2025-04-21_11-17_1.jpg)
-![Default dice 2](./examples/2025-04-21_11-17.jpg)
+![Default dice 1](../img/examples/2025-04-21_11-17_1.jpg)
+![Default dice 2](../img/examples/2025-04-21_11-17.jpg)
 
 ### 🎨 Custom Dice Example 1
 
