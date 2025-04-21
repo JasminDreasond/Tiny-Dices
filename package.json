@@ -1,7 +1,7 @@
 {
   "name": "tiny-dices",
   "description": "Tiny Dices adds a sprinkle of fun and a touch of magic to your dice-rolling adventures — fully customizable with CSS and JavaScript to match your style, theme, or imagination! 🎲✨",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -12,7 +12,7 @@
       "import": "./dist/index.mjs"
     }
   },
-  "repository": "https://github.com/JasminDreasond/Tiny-Dice.git",
+  "repository": "https://github.com/JasminDreasond/Tiny-Dices.git",
   "author": "Yasmin Seidel (JasminDreasond)",
   "license": "GPL-3.0-only",
   "dependencies": {
