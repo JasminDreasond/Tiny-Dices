@@ -346,7 +346,6 @@ class TinyDices {
    * For security reasons, only `data:` URLs are accepted by default to avoid external resource injection.
    * You can override this restriction using the `forceUnsafe` flag, but this is discouraged unless trusted.
    *
-   * @public
    * @param {string|null} value - The background-image URL (must be a `data:` image by default).
    * @param {boolean} [forceUnsafe=false] - Allows setting non-data URLs if true (use with caution).
    */
@@ -358,7 +357,6 @@ class TinyDices {
   /**
    * Returns the currently set background image if valid, or null.
    *
-   * @public
    * @returns {string|null} - The current background-image value (data:image URL) or null if none is set.
    */
   getBgImg() {
@@ -429,7 +427,6 @@ class TinyDices {
    * Accepts valid CSS color strings or `linear-gradient(...)`.
    * Invalid values reset the skin to `null`.
    *
-   * @public
    * @param {string} skin - The CSS background to apply when a die is selected.
    */
   setSelectionBgSkin(skin) {
@@ -449,7 +446,6 @@ class TinyDices {
    * Gets the background skin used for selected dice.
    * Returns the custom value if set; otherwise, returns the default.
    *
-   * @public
    * @returns {string|null} The current background skin for selected dice.
    */
   getSelectionBgSkin() {
@@ -461,7 +457,6 @@ class TinyDices {
    * Only valid CSS color values are accepted.
    * Invalid inputs will reset the color to `null`.
    *
-   * @public
    * @param {string} skin - The text color for selected dice.
    */
   setSelectionTextSkin(skin) {
@@ -472,7 +467,6 @@ class TinyDices {
    * Gets the text color used for selected dice.
    * Returns the custom value if set; otherwise, returns the default.
    *
-   * @public
    * @returns {string|null} The current text color for selected dice.
    */
   getSelectionTextSkin() {
@@ -522,7 +516,6 @@ class TinyDices {
    * Iterates through each dice in `this.#elements` and applies the active
    * background, text color, border, and background image styles using `#updateDiceFaceSkin`.
    *
-   * @public
    */
   updateDicesSkin() {
     for (const index in this.#elements) this.updateDiceSkin(index);
