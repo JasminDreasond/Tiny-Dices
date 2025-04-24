@@ -34,30 +34,55 @@ import validateColor from 'validate-color';
  * dice.getBorderSkin();                   // Gets current or default border skin
  */
 class TinyDices {
+  /**
+   * @typedef {Object} DiceElement
+   * @property {HTMLElement[]} faces - An array of six face elements.
+   * @property {HTMLElement|null} container - The outer wrapper element.
+   * @property {HTMLElement|null} wrapper - The rotating inner cube element.
+   */
+
+  /**
+   * @typedef {Object} CubeResult
+   * @property {HTMLDivElement} cube - The DOM element representing the cube container.
+   * @property {number[]} sequence - The final sequence of values shown on each face.
+   */
+
+  /**
+   * Stores all current dice elements created by the instance.
+   *
+   * Each element follows the `DiceElement` structure, containing cube faces,
+   * its container, and the cube wrapper for rotation.
+   *
+   * @type {DiceElement[]}
+   */
   #elements = [];
+
   #cubeId = 0; // used for incremental z-index to avoid overlapping issues
-  #defaultBgSkin = 'linear-gradient(135deg, #ff3399, #33ccff)';
-  #defaultBorderSkin = '2px solid rgba(255, 255, 255, 0.2)';
-  #defaultSelectionTextSkin = '#FFF';
-  #defaultSelectionBgSkin = '#000';
-  #defaultTextSkin = 'white';
-  #selectionBgSkin;
-  #selectionTextSkin;
-  #bgSkin;
-  #bgImg;
-  #textSkin;
-  #borderSkin;
-  #diceBase;
   #destroyed = false;
+
+  /** @type {string|null} */ #defaultBgSkin = 'linear-gradient(135deg, #ff3399, #33ccff)';
+  /** @type {string|null} */ #defaultBorderSkin = '2px solid rgba(255, 255, 255, 0.2)';
+  /** @type {string|null} */ #defaultSelectionTextSkin = '#FFF';
+  /** @type {string|null} */ #defaultSelectionBgSkin = '#000';
+  /** @type {string|null} */ #defaultTextSkin = 'white';
+  /** @type {string|null} */ #selectionBgSkin = null;
+  /** @type {string|null} */ #selectionTextSkin = null;
+  /** @type {string|null} */ #bgSkin = null;
+  /** @type {string|null} */ #bgImg = null;
+  /** @type {string|null} */ #textSkin = null;
+  /** @type {string|null} */ #borderSkin = null;
+
+  /** @type {HTMLElement|null} */ #diceBase = null;
+  /** @type {HTMLElement|null} */ diceArea = null;
+  /** @type {HTMLElement|null} */ container = null;
 
   /**
    * Creates a cube DOM element with animated faces and randomized values.
    *
-   * @private
    * @param {number} result - The main value to appear on the front face.
    * @param {number} max - The maximum possible value for the die.
    * @param {boolean} [rollInfinity=false] - If true, the cube will spin infinitely.
-   * @returns {{ cube: HTMLElement, sequence: number[] }} - The cube element and an array of all face values.
+   * @returns {CubeResult} - The cube element and an array of all face values.
    */
   #createCube;
 
@@ -65,7 +90,7 @@ class TinyDices {
    * Creates a new TinyDices instance attached to a specified HTML element.
    *
    * @param {HTMLElement} diceBase - The HTML container element where the dice will be rendered.
-   * @param {function(number, number, boolean=, boolean=): {cube: HTMLElement, sequence: number[]}=} [createCubeScript=null]
+   * @param {(result: number, max: number, canZero?: boolean, rollInfinity?: boolean) => CubeResult} [createCubeScript=null]
    *        - Optional function to override the internal cube creation logic.
    *          If provided, it will be used instead of the built-in method.
    *
@@ -100,10 +125,10 @@ class TinyDices {
    *
    *
    */
-  constructor(diceBase = null, createCubeScript = null) {
+  constructor(diceBase, createCubeScript) {
     if (typeof createCubeScript === 'function') this.#createCube = createCubeScript;
     else this.#insertCreateCube();
-    if (diceBase && diceBase instanceof HTMLElement) {
+    if (typeof HTMLElement !== 'undefined' && diceBase instanceof HTMLElement) {
       this.#diceBase = diceBase;
       this.#diceBase.classList.add('tiny-dices-body');
 
@@ -115,13 +140,14 @@ class TinyDices {
   }
 
   /**
-   * @private
    * Internal helper to check if the dice base element is a valid HTMLElement.
    *
    * @returns {boolean} - True if #diceBase is a valid HTMLElement.
    */
   #existsHtml() {
-    return this.#diceBase && this.#diceBase instanceof HTMLElement;
+    return typeof HTMLElement !== 'undefined' && this.#diceBase instanceof HTMLElement
+      ? true
+      : false;
   }
 
   /**
@@ -153,20 +179,15 @@ class TinyDices {
    * This method ensures that the given object has the correct structure
    * before appending it to the internal array of rendered dice elements.
    *
-   * @private
-   * @param {object} item - The dice element object to validate and store.
-   * @param {HTMLElement[]} item.faces - An array of dice face elements.
-   * @param {HTMLElement} item.container - The container element for the die.
-   * @param {HTMLElement} item.wrapper - The inner wrapper that holds and rotates the cube.
+   * @param {DiceElement} item - The dice element object to validate and store.
    * @returns {boolean} `true` if the item was valid and added; otherwise, `false`.
    */
   #addElement(item) {
     if (
       objType(item, 'object') &&
       Array.isArray(item.faces) &&
-      item.container &&
+      typeof HTMLElement !== 'undefined' &&
       item.container instanceof HTMLElement &&
-      item.wrapper &&
       item.wrapper instanceof HTMLElement
     ) {
       this.#elements.push(item);
@@ -181,7 +202,7 @@ class TinyDices {
    * This is the public wrapper for the internal method `#addElement`.
    * It validates the structure of the dice element before adding.
    *
-   * @param {{ faces: HTMLElement[], container: HTMLElement, wrapper: HTMLElement }} item
+   * @param {DiceElement} item
    *        - The dice element object to add. It must contain:
    *          - `faces`: an array of six face elements,
    *          - `container`: the outer wrapper element,
@@ -196,7 +217,6 @@ class TinyDices {
   /**
    * Validates a background-image value restricted to safe data:image URLs only.
    *
-   * @private
    * @param {string} value - The CSS background-image value.
    * @returns {boolean}
    */
@@ -213,7 +233,6 @@ class TinyDices {
   /**
    * Validates a linear-gradient string to prevent unsafe or malformed styles.
    *
-   * @private
    * @param {string} value - The CSS gradient string.
    * @returns {boolean}
    */
@@ -286,7 +305,6 @@ class TinyDices {
   /**
    * Validates a CSS border string like '1px solid red' or '2px dashed linear-gradient(...)'.
    *
-   * @private
    * @param {string} value - The CSS border string.
    * @returns {boolean}
    */
@@ -368,7 +386,7 @@ class TinyDices {
 
   /**
    * Gets the currently applied background skin.
-   * @returns {string} The current background skin, or the default if not set.
+   * @returns {string|null} The current background skin, or the default if not set.
    */
   getBgSkin() {
     return this.#bgSkin || this.#defaultBgSkin;
@@ -384,7 +402,7 @@ class TinyDices {
 
   /**
    * Gets the currently applied text skin.
-   * @returns {string} The current text skin, or the default if not set.
+   * @returns {string|null} The current text skin, or the default if not set.
    */
   getTextSkin() {
     return this.#textSkin || this.#defaultTextSkin;
@@ -400,7 +418,7 @@ class TinyDices {
 
   /**
    * Gets the currently applied border skin.
-   * @returns {string} The current border skin, or the default if not set.
+   * @returns {string|null} The current border skin, or the default if not set.
    */
   getBorderSkin() {
     return this.#borderSkin || this.#defaultBorderSkin;
@@ -432,7 +450,7 @@ class TinyDices {
    * Returns the custom value if set; otherwise, returns the default.
    *
    * @public
-   * @returns {string} The current background skin for selected dice.
+   * @returns {string|null} The current background skin for selected dice.
    */
   getSelectionBgSkin() {
     return this.#selectionBgSkin || this.#defaultSelectionBgSkin;
@@ -455,7 +473,7 @@ class TinyDices {
    * Returns the custom value if set; otherwise, returns the default.
    *
    * @public
-   * @returns {string} The current text color for selected dice.
+   * @returns {string|null} The current text color for selected dice.
    */
   getSelectionTextSkin() {
     return this.#selectionTextSkin || this.#defaultSelectionTextSkin;
@@ -466,14 +484,13 @@ class TinyDices {
    * This includes background color, text color, border style, and optionally
    * a `background-image` if set via `setBgImg`.
    *
-   * @private
    * @param {HTMLElement} face - The HTML element representing a dice face.
    */
   #updateDiceFaceSkin(face) {
     // Skin
-    face.style.background = this.getBgSkin();
-    face.style.color = this.getTextSkin();
-    face.style.border = this.getBorderSkin();
+    face.style.background = this.getBgSkin() || '';
+    face.style.color = this.getTextSkin() || '';
+    face.style.border = this.getBorderSkin() || '';
     face.style.setProperty('--dice-selection-bg', this.getSelectionBgSkin());
     face.style.setProperty('--dice-selection-text', this.getSelectionTextSkin());
 
@@ -516,14 +533,20 @@ class TinyDices {
    * Applies current background color, text color, border style, and background image
    * to all face elements of the selected die using `#updateDiceFaceSkin`.
    *
-   * @public
    * @param {number|string} index - The index of the die to update.
+   * @throws {Error} If the index is not a valid number or string convertible to number.
+   *
    * @returns {boolean} Returns `true` if the die was found and updated; otherwise `false`.
    */
   updateDiceSkin(index) {
-    if (this.#elements[index]) {
-      for (const index2 in this.#elements[index].faces)
-        this.#updateDiceFaceSkin(this.#elements[index].faces[index2]);
+    const parsedIndex =
+      typeof index === 'string' ? parseInt(index) : typeof index === 'number' ? index : -1;
+    if (Number.isNaN(parsedIndex))
+      throw new Error('updateDiceSkin: index must be a number or a numeric string.');
+    const element = this.#elements[parsedIndex];
+
+    if (element) {
+      for (const index2 in element.faces) this.#updateDiceFaceSkin(element.faces[index2]);
       return true;
     } else return false;
   }
@@ -532,7 +555,6 @@ class TinyDices {
    * Generates a random integer between 1 and max (inclusive).
    * If `canZero` is true, the range becomes 0 to max (inclusive).
    *
-   * @private
    * @param {number} max - The maximum value for the roll (inclusive).
    * @param {boolean} [canZero=false] - Whether the result can include 0.
    * @returns {number} A random integer between 1 and max, or 0 and max if `canZero` is true. Returns 0 if max <= 0.
@@ -540,9 +562,7 @@ class TinyDices {
   #rollNumber(max = 0, canZero = false) {
     // Throw an error if the value is not a valid number
     if (typeof max !== 'number' || Number.isNaN(max)) {
-      throw new Error(
-        `Invalid die max value at index ${i}: ${max}. All values must be positive numbers.`,
-      );
+      throw new Error(`Invalid die max value: ${max}. All values must be positive numbers.`);
     }
 
     // Valid number
@@ -610,10 +630,23 @@ class TinyDices {
    * @param {number} max - The maximum value for the die (used to generate other random faces).
    * @param {boolean} [canZero=false] - Whether 0 is a valid face value.
    * @param {boolean} [rollInfinity=false] - Whether the die should spin indefinitely.
+   *
+   * @throws {Error} If `this.diceArea` is not a valid HTMLElement.
+   * @throws {Error} If `this.#createCube` is not a function.
+   * @throws {Error} If cube creation fails or returns an invalid sequence.
    * @returns {number[]} - An array representing the values on all six faces of the cube.
    */
   insertDiceElement(result, max, canZero, rollInfinity) {
+    if (typeof HTMLElement === 'undefined' || !(this.diceArea instanceof HTMLElement))
+      throw new Error('insertDiceElement: this.diceArea is not a valid HTMLElement.');
+
+    if (typeof this.#createCube !== 'function')
+      throw new Error('insertDiceElement: this.#createCube is not a valid function.');
+
     const { cube, sequence } = this.#createCube(result, max, canZero, rollInfinity);
+    if (!Array.isArray(sequence))
+      throw new Error('insertDiceElement: invalid cube sequence returned.');
+
     this.diceArea.appendChild(cube);
     return sequence;
   }
@@ -624,7 +657,8 @@ class TinyDices {
    */
   clearDiceArea() {
     this.#cubeId = 0;
-    if (this.#existsHtml()) this.diceArea.innerHTML = '';
+    if (typeof HTMLElement !== 'undefined' && this.diceArea instanceof HTMLElement)
+      this.diceArea.innerHTML = '';
     this.#elements = [];
   }
 
@@ -635,25 +669,23 @@ class TinyDices {
    * assigned a unique number (avoiding duplicates when possible). The front face shows the
    * result value passed in, and the others are randomized based on the `max` value.
    *
-   * @private
-   *
    * @remarks
    * If `createCubeScript` was not provided to the constructor, this method sets up the default cube generator.
    *
    * @returns {void}
    *
-   * @see #createCube
-   *
    * @function
    */
   #insertCreateCube() {
     const tinyDice = this;
+    /** @type {function(number, number, boolean=, boolean=): CubeResult} */
     this.#createCube = (result, max, canZero = false, rollInfinity = false) => {
       // Container
-      const diceElements = { faces: [] };
+      /** @type {DiceElement} */
+      const diceElements = { faces: [], container: null, wrapper: null };
       const container = document.createElement('div');
       container.className = 'dice-container';
-      container.style.zIndex = 1000 + tinyDice.addCubeId(); // each dice with higher priority
+      container.style.zIndex = String(1000 + tinyDice.addCubeId()); // each dice with higher priority
       diceElements.container = container;
 
       // Wrapper
@@ -706,11 +738,11 @@ class TinyDices {
           if (roll < 1) roll = 0;
           sequence.push(roll);
           countSeq.add(roll);
-          face.textContent = roll;
+          face.textContent = String(roll);
         }
         // The result!
         else {
-          face.textContent = result;
+          face.textContent = String(result);
           sequence.push(result);
           countSeq.add(result);
         }
@@ -739,12 +771,13 @@ class TinyDices {
    * @param {number} max - Default maximum value for dice (if no individual values are given).
    * @param {boolean} [canZero=false] - Whether 0 is a valid result.
    * @param {boolean} [rollInfinity=false] - Whether all dice should spin infinitely.
-   * @returns {{ result: number, sequence: number[] }} - Array with results and face sequences for each die.
+   * @returns {{ result: number, sequence?: number[] }} - Array with results and face sequences for each die.
    */
   rollDice(max, canZero = false, rollInfinity = undefined) {
     const cube = { result: this.#rollNumber(max, canZero) };
     if (this.#existsHtml())
-      cube.sequece = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+      // @ts-ignore
+      cube.sequence = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
     return cube;
   }
 
@@ -754,7 +787,7 @@ class TinyDices {
    * @param {number[]} perDieData - Array of individual max values per die.
    * @param {boolean} [canZero=false] - Whether 0 is a valid result on any die.
    * @param {boolean} [rollInfinity=false] - Whether all dice should spin infinitely.
-   * @returns {Array<{ result: number, sequence: number[] }>} - Array with results and face sequences for each die.
+   * @returns {Array<{ result: number, sequence?: number[] }>} - Array with results and face sequences for each die.
    */
   rollDices(perDieData, canZero = false, rollInfinity = false) {
     const cubes = [];
@@ -762,7 +795,8 @@ class TinyDices {
       const max = perDieData[i];
       const cube = { result: this.#rollNumber(max, canZero) };
       if (this.#existsHtml())
-        cube.sequece = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+        // @ts-ignore
+        cube.sequence = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
       cubes.push(cube);
     }
     return cubes;
@@ -774,7 +808,7 @@ class TinyDices {
    * @param {string|Array<number>} perDieInput - Either a comma-separated string or array of max values per die.
    * @param {boolean} [canZero=false] - Whether 0 is a valid result.
    * @param {boolean} [rollInfinity=false] - Whether dice spin infinitely.
-   * @returns {Array<{ result: number, sequence: number[] }>} - Array with results and face sequences for each die.
+   * @returns {Array<{ result: number, sequence?: number[] }>} - Array with results and face sequences for each die.
    */
   roll(perDieInput, canZero = false, rollInfinity = false) {
     const perDieData = this.parseRollConfig(perDieInput);
@@ -814,9 +848,11 @@ class TinyDices {
     this.clearDiceArea();
 
     // Remove container element content (optional: comment if you want to preserve it)
-    if (this.container && this.container instanceof HTMLElement) this.container.innerHTML = '';
-    if (this.#diceBase && this.#diceBase instanceof HTMLElement) this.#diceBase.innerHTML = '';
-    if (this.diceArea && this.diceArea instanceof HTMLElement) this.diceArea.innerHTML = '';
+    if (typeof HTMLElement !== 'undefined') {
+      if (this.container instanceof HTMLElement) this.container.innerHTML = '';
+      if (this.#diceBase instanceof HTMLElement) this.#diceBase.innerHTML = '';
+      if (this.diceArea instanceof HTMLElement) this.diceArea.innerHTML = '';
+    }
 
     // Optionally, unset the container reference
     this.#diceBase = null;
