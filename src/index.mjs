@@ -1,4 +1,4 @@
-import { objType } from 'tiny-essentials';
+import { isJsonObject } from 'tiny-essentials';
 import validateColor from 'validate-color';
 
 /**
@@ -184,7 +184,7 @@ class TinyDices {
    */
   #addElement(item) {
     if (
-      objType(item, 'object') &&
+      isJsonObject(item) &&
       Array.isArray(item.faces) &&
       typeof HTMLElement !== 'undefined' &&
       item.container instanceof HTMLElement &&
