@@ -1,7 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import preserveDirectories from 'rollup-preserve-directives';
-import terser from '@rollup/plugin-terser';
 const pkg = JSON.parse(fs.readFileSync('./package.json'))
 
 import fs from 'fs';
@@ -43,30 +42,4 @@ export default [
     },
     plugins,
   },
-
-  // IIFE (browser)
-  {
-    input: 'src/index.mjs',
-    output: {
-      file: 'dist/TinyDices.min.js',
-      format: 'iife',
-      name: 'TinyDices',
-      sourcemap: false,
-      globals: {
-        'lodash': '_',
-      }
-    },
-    plugins: [
-      resolve({
-        browser: true,
-        preferBuiltins: false
-      }),
-      commonjs(),
-      terser({
-        format: {
-          comments: false,
-        },
-      }),
-    ]
-  }
 ];
