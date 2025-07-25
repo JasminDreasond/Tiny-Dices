@@ -18,6 +18,7 @@ const addModule = (entry, library, isClass = false) => {
       libraryExport: isClass ? library : undefined,
     },
     optimization: {
+      usedExports: true,
       runtimeChunk: false,
       splitChunks: false,
     },
@@ -30,7 +31,7 @@ const addModule = (entry, library, isClass = false) => {
   };
   modules.push(
     // Non-minified version
-    {
+    /** {
       ...baseConfig,
       mode: 'development',
       output: {
@@ -41,7 +42,7 @@ const addModule = (entry, library, isClass = false) => {
         ...baseConfig.optimization,
         minimize: false,
       },
-    },
+    }, */
     // Minified version
     {
       ...baseConfig,
