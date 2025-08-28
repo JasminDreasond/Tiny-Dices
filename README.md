@@ -135,3 +135,11 @@ This project is licensed under the GPL-3.0 License – feel free to use and cust
 ---
 
 ### 🚀 Let's roll those tiny dice! 🎲
+
+---
+
+<div align="center">
+<a href="./img/icons/"><img src="./img/icons/69d958d1-381f-43f9-aee5-d9ffaff3b546.png" height="300" /></a>
+<br/>
+Made with tiny love!
+</div>
