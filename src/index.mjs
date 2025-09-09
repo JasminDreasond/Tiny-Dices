@@ -1,6 +1,35 @@
 import { isJsonObject, TinyColorValidator } from 'tiny-essentials';
 
 /**
+ * @typedef {Object} PreDiceResult
+ * @property {number[]} sequence The sequence of values shown on each face.
+ * @property {() => number[]} reRollDice Function that re-rolls the dice and returns the new sequence.
+ * @property {() => void} stop Function that stops the dice rolling.
+ * @property {NodeJS.Timeout|null} stopTimeout Reference to the timeout controlling the dice stop, or null if not set.
+ */
+
+/**
+ * The final dice result.
+ * @typedef {PreDiceResult & { result: number }} DiceResult
+ */
+
+/**
+ * @typedef {Object} DiceElement
+ * @property {HTMLElement[]} faces - An array of six face elements.
+ * @property {HTMLElement|null} container - The outer wrapper element.
+ * @property {HTMLElement|null} wrapper - The rotating inner cube element.
+ */
+
+/**
+ * @typedef {Object} CubeResult
+ * @property {HTMLDivElement} cube - The DOM element representing the cube container.
+ * @property {number[]} sequence - The final sequence of values shown on each face.
+ * @property {() => number[]} reRollDice - Function that re-rolls the dice and returns the new sequence.
+ * @property {NodeJS.Timeout|null} stopTimeout - stopTimeout Reference to the timeout controlling the cube stop, or null if not set.
+ * @property {() => void} stop - Function that stops the cube rolling.
+ */
+
+/**
  * TinyDices - JavaScript class for rendering animated 3D dice with HTML/CSS.
  *
  * Created by: Yasmin Seidel (JasminDreasond)
@@ -33,22 +62,6 @@ import { isJsonObject, TinyColorValidator } from 'tiny-essentials';
  * dice.getBorderSkin();                   // Gets current or default border skin
  */
 class TinyDices {
-  /**
-   * @typedef {Object} DiceElement
-   * @property {HTMLElement[]} faces - An array of six face elements.
-   * @property {HTMLElement|null} container - The outer wrapper element.
-   * @property {HTMLElement|null} wrapper - The rotating inner cube element.
-   */
-
-  /**
-   * @typedef {Object} CubeResult
-   * @property {HTMLDivElement} cube - The DOM element representing the cube container.
-   * @property {number[]} sequence - The final sequence of values shown on each face.
-   * @property {() => number[]} reRollDice - Function that re-rolls the dice and returns the new sequence.
-   * @property {NodeJS.Timeout|null} stopTimeout - stopTimeout Reference to the timeout controlling the cube stop, or null if not set.
-   * @property {number} result - The last dice result.
-   * @property {() => void} stop - Function that stops the cube rolling.
-   */
 
   /**
    * Stores all current dice elements created by the instance.
@@ -63,7 +76,7 @@ class TinyDices {
   #cubeId = 0; // used for incremental z-index to avoid overlapping issues
   #destroyed = false;
   #stopTime = 2000;
-  #rdChangerAmount = 30;
+  #rdChangerAmount = 500;
 
   /** @type {string|null} */ #defaultBgSkin = 'linear-gradient(135deg, #ff3399, #33ccff)';
   /** @type {string|null} */ #defaultBorderSkin = '2px solid rgba(255, 255, 255, 0.2)';
@@ -667,7 +680,7 @@ class TinyDices {
    * @throws {Error} If `this.diceArea` is not a valid HTMLElement.
    * @throws {Error} If `this.#createCube` is not a function.
    * @throws {Error} If cube creation fails or returns an invalid sequence.
-   * @returns {number[]} - An array representing the values on all six faces of the cube.
+   * @returns {PreDiceResult} - An object with the array representing the values on all six faces of the cube.
    */
   insertDiceElement(result, max, canZero, rollInfinity) {
     if (typeof HTMLElement === 'undefined' || !(this.diceArea instanceof HTMLElement))
@@ -676,12 +689,17 @@ class TinyDices {
     if (typeof this.#createCube !== 'function')
       throw new Error('insertDiceElement: this.#createCube is not a valid function.');
 
-    const { cube, sequence } = this.#createCube(result, max, canZero, rollInfinity);
+    const { cube, sequence, stop, reRollDice, stopTimeout } = this.#createCube(
+      result,
+      max,
+      canZero,
+      rollInfinity,
+    );
     if (!Array.isArray(sequence))
       throw new Error('insertDiceElement: invalid cube sequence returned.');
 
     this.diceArea.appendChild(cube);
-    return sequence;
+    return { sequence, stop, reRollDice, stopTimeout };
   }
 
   /**
@@ -823,9 +841,11 @@ class TinyDices {
       // Insert the cube
       container.appendChild(wrapper);
       this.#addElement(diceElements);
-      return { result, cube: container, sequence, stop, reRollDice: rollDice, stopTimeout };
+      return { cube: container, sequence, stop, reRollDice: rollDice, stopTimeout };
     };
   }
+
+
 
   /**
    * Inserts a single die cube into the DOM using the specified configuration.
@@ -833,13 +853,24 @@ class TinyDices {
    * @param {number} max - Default maximum value for dice (if no individual values are given).
    * @param {boolean} [canZero=false] - Whether 0 is a valid result.
    * @param {boolean} [rollInfinity=false] - Whether all dice should spin infinitely.
-   * @returns {{ result: number, sequence?: number[] }} - Array with results and face sequences for each die.
+   * @returns {DiceResult} - Array with results and face sequences for each die.
    */
   rollDice(max, canZero = false, rollInfinity = undefined) {
-    const cube = { result: this.#rollNumber(max, canZero) };
-    if (this.#existsHtml())
-      // @ts-ignore
-      cube.sequence = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+    /** @type {DiceResult} */
+    const cube = {
+      reRollDice: () => [],
+      stop: () => undefined,
+      stopTimeout: null,
+      sequence: [],
+      result: this.#rollNumber(max, canZero),
+    };
+    if (this.#existsHtml()) {
+      const data = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+      cube.sequence = data.sequence;
+      cube.reRollDice = data.reRollDice;
+      cube.stop = data.stop;
+      cube.stopTimeout = data.stopTimeout;
+    }
     return cube;
   }
 
@@ -849,16 +880,27 @@ class TinyDices {
    * @param {number[]} perDieData - Array of individual max values per die.
    * @param {boolean} [canZero=false] - Whether 0 is a valid result on any die.
    * @param {boolean} [rollInfinity=false] - Whether all dice should spin infinitely.
-   * @returns {Array<{ result: number, sequence?: number[] }>} - Array with results and face sequences for each die.
+   * @returns {Array<DiceResult>} - Array with results and face sequences for each die.
    */
   rollDices(perDieData, canZero = false, rollInfinity = false) {
     const cubes = [];
     for (let i = 0; i < perDieData.length; i++) {
       const max = perDieData[i];
-      const cube = { result: this.#rollNumber(max, canZero) };
-      if (this.#existsHtml())
-        // @ts-ignore
-        cube.sequence = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+      /** @type {DiceResult} */
+      const cube = {
+        reRollDice: () => [],
+        stop: () => undefined,
+        stopTimeout: null,
+        sequence: [],
+        result: this.#rollNumber(max, canZero),
+      };
+      if (this.#existsHtml()) {
+        const data = this.insertDiceElement(cube.result, max, canZero, rollInfinity);
+        cube.sequence = data.sequence;
+        cube.reRollDice = data.reRollDice;
+        cube.stop = data.stop;
+        cube.stopTimeout = data.stopTimeout;
+      }
       cubes.push(cube);
     }
     return cubes;
