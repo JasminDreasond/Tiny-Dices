@@ -10,6 +10,8 @@ tsconfig.json
 img
 changelog
 
+temp
+
 # Logs
 logs
 *.log
