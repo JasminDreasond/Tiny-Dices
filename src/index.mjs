@@ -362,7 +362,7 @@ class TinyDices {
    * @param {number} value Stop time value.
    * @returns {void}
    */
-  setRdChangerAmount(value) {
+  set rdChangerAmount(value) {
     this.#rdChangerAmount = value;
   }
 
@@ -370,7 +370,7 @@ class TinyDices {
    * Gets the current random changer amount.
    * @returns {number} Random changer amountvalue.
    */
-  getRdChangerAmount() {
+  get rdChangerAmount() {
     return this.#rdChangerAmount;
   }
 
@@ -378,7 +378,7 @@ class TinyDices {
    * Gets the current stop time.
    * @returns {number} Stop time value.
    */
-  getStopTime() {
+  get stopTime() {
     return this.#stopTime;
   }
 
@@ -387,8 +387,20 @@ class TinyDices {
    * @param {number} value Stop time value.
    * @returns {void}
    */
-  setStopTime(value) {
+  set stopTime(value) {
     this.#stopTime = value;
+  }
+
+  /**
+   * Sets the background image using a `data:` URL.
+   *
+   * For security reasons, only `data:` URLs are accepted by default to avoid external resource injection.
+   *
+   * @param {string|null} value - The background-image URL (must be a `data:` image by default).
+   */
+  set bgImg(value) {
+    this.#bgImg =
+      typeof value === 'string' && this.#isValidDataImage(value) ? value : null;
   }
 
   /**
@@ -410,7 +422,7 @@ class TinyDices {
    *
    * @returns {string|null} - The current background-image value (data:image URL) or null if none is set.
    */
-  getBgImg() {
+  get bgImg() {
     return this.#bgImg || null;
   }
 
@@ -420,7 +432,7 @@ class TinyDices {
    *
    * @param {string} skin - A valid CSS color string or gradient.
    */
-  setBgSkin(skin) {
+  set bgSkin(skin) {
     if (typeof skin !== 'string') {
       this.#bgSkin = null;
       return;
@@ -437,7 +449,7 @@ class TinyDices {
    * Gets the currently applied background skin.
    * @returns {string|null} The current background skin, or the default if not set.
    */
-  getBgSkin() {
+  get bgSkin() {
     return this.#bgSkin || this.#defaultBgSkin;
   }
 
@@ -445,7 +457,7 @@ class TinyDices {
    * Sets the text skin (style) of the dice numbers.
    * @param {string|null} skin - The skin name to apply to the text. Pass null or non-string to reset to default.
    */
-  setTextSkin(skin) {
+  set textSkin(skin) {
     this.#textSkin = typeof skin === 'string' && !!TinyColorValidator.isColor(skin) ? skin : null;
   }
 
@@ -453,7 +465,7 @@ class TinyDices {
    * Gets the currently applied text skin.
    * @returns {string|null} The current text skin, or the default if not set.
    */
-  getTextSkin() {
+  get textSkin() {
     return this.#textSkin || this.#defaultTextSkin;
   }
 
@@ -461,7 +473,7 @@ class TinyDices {
    * Sets the border skin (style) of the dice edges.
    * @param {string|null} skin - The skin name to apply to the border. Pass null or non-string to reset to default.
    */
-  setBorderSkin(skin) {
+  set borderSkin(skin) {
     this.#borderSkin = typeof skin === 'string' && this.#isValidCssBorder(skin) ? skin : null;
   }
 
@@ -469,7 +481,7 @@ class TinyDices {
    * Gets the currently applied border skin.
    * @returns {string|null} The current border skin, or the default if not set.
    */
-  getBorderSkin() {
+  get borderSkin() {
     return this.#borderSkin || this.#defaultBorderSkin;
   }
 
@@ -480,7 +492,7 @@ class TinyDices {
    *
    * @param {string} skin - The CSS background to apply when a die is selected.
    */
-  setSelectionBgSkin(skin) {
+  set selectionBgSkin(skin) {
     if (typeof skin !== 'string') {
       this.#selectionBgSkin = null;
       return;
@@ -499,7 +511,7 @@ class TinyDices {
    *
    * @returns {string|null} The current background skin for selected dice.
    */
-  getSelectionBgSkin() {
+  get selectionBgSkin() {
     return this.#selectionBgSkin || this.#defaultSelectionBgSkin;
   }
 
@@ -510,7 +522,7 @@ class TinyDices {
    *
    * @param {string} skin - The text color for selected dice.
    */
-  setSelectionTextSkin(skin) {
+  set selectionTextSkin(skin) {
     this.#selectionTextSkin =
       typeof skin === 'string' && !!TinyColorValidator.isColor(skin) ? skin : null;
   }
@@ -521,7 +533,7 @@ class TinyDices {
    *
    * @returns {string|null} The current text color for selected dice.
    */
-  getSelectionTextSkin() {
+  get selectionTextSkin() {
     return this.#selectionTextSkin || this.#defaultSelectionTextSkin;
   }
 
@@ -534,14 +546,14 @@ class TinyDices {
    */
   #updateDiceFaceSkin(face) {
     // Skin
-    face.style.background = this.getBgSkin() || '';
-    face.style.color = this.getTextSkin() || '';
-    face.style.border = this.getBorderSkin() || '';
-    face.style.setProperty('--dice-selection-bg', this.getSelectionBgSkin());
-    face.style.setProperty('--dice-selection-text', this.getSelectionTextSkin());
+    face.style.background = this.bgSkin || '';
+    face.style.color = this.textSkin || '';
+    face.style.border = this.borderSkin || '';
+    face.style.setProperty('--dice-selection-bg', this.selectionBgSkin);
+    face.style.setProperty('--dice-selection-text', this.selectionTextSkin);
 
     // Background image
-    const bgImg = this.getBgImg();
+    const bgImg = this.bgImg;
     if (bgImg) {
       face.style.backgroundImage = `url("${bgImg}")`;
       face.style.backgroundPosition = 'center';
