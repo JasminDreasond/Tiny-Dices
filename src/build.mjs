@@ -1,3 +1,3 @@
-import TinyDices from "./index.mjs";
+import TinyDices from './index.mjs';
 
 export { TinyDices };

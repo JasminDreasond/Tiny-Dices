@@ -44,6 +44,10 @@ class TinyDices {
    * @typedef {Object} CubeResult
    * @property {HTMLDivElement} cube - The DOM element representing the cube container.
    * @property {number[]} sequence - The final sequence of values shown on each face.
+   * @property {() => number[]} reRollDice - Function that re-rolls the dice and returns the new sequence.
+   * @property {NodeJS.Timeout|null} stopTimeout - stopTimeout Reference to the timeout controlling the cube stop, or null if not set.
+   * @property {number} result - The last dice result.
+   * @property {() => void} stop - Function that stops the cube rolling.
    */
 
   /**
@@ -58,6 +62,8 @@ class TinyDices {
 
   #cubeId = 0; // used for incremental z-index to avoid overlapping issues
   #destroyed = false;
+  #stopTime = 2000;
+  #rdChangerAmount = 30;
 
   /** @type {string|null} */ #defaultBgSkin = 'linear-gradient(135deg, #ff3399, #33ccff)';
   /** @type {string|null} */ #defaultBorderSkin = '2px solid rgba(255, 255, 255, 0.2)';
@@ -340,6 +346,40 @@ class TinyDices {
   }
 
   /**
+   * Sets the random changer amount.
+   * @param {number} value Stop time value.
+   * @returns {void}
+   */
+  setRdChangerAmount(value) {
+    this.#rdChangerAmount = value;
+  }
+
+  /**
+   * Gets the current random changer amount.
+   * @returns {number} Random changer amountvalue.
+   */
+  getRdChangerAmount() {
+    return this.#rdChangerAmount;
+  }
+
+  /**
+   * Gets the current stop time.
+   * @returns {number} Stop time value.
+   */
+  getStopTime() {
+    return this.#stopTime;
+  }
+
+  /**
+   * Sets the stop time.
+   * @param {number} value Stop time value.
+   * @returns {void}
+   */
+  setStopTime(value) {
+    this.#stopTime = value;
+  }
+
+  /**
    * Sets the background image using a `data:` URL or, optionally, a standard image URL if forced.
    *
    * For security reasons, only `data:` URLs are accepted by default to avoid external resource injection.
@@ -459,7 +499,8 @@ class TinyDices {
    * @param {string} skin - The text color for selected dice.
    */
   setSelectionTextSkin(skin) {
-    this.#selectionTextSkin = typeof skin === 'string' && !!TinyColorValidator.isColor(skin) ? skin : null;
+    this.#selectionTextSkin =
+      typeof skin === 'string' && !!TinyColorValidator.isColor(skin) ? skin : null;
   }
 
   /**
@@ -669,15 +710,21 @@ class TinyDices {
    * @function
    */
   #insertCreateCube() {
-    const tinyDice = this;
-    /** @type {function(number, number, boolean=, boolean=): CubeResult} */
+    /**
+     * @param {number} result
+     * @param {number} max
+     * @param {boolean} [canZero=false]
+     * @param {boolean} [rollInfinity=false]
+     *
+     * @returns {CubeResult}
+     */
     this.#createCube = (result, max, canZero = false, rollInfinity = false) => {
       // Container
       /** @type {DiceElement} */
       const diceElements = { faces: [], container: null, wrapper: null };
       const container = document.createElement('div');
       container.className = 'dice-container';
-      container.style.zIndex = String(1000 + tinyDice.addCubeId()); // each dice with higher priority
+      container.style.zIndex = String(1000 + this.addCubeId()); // each dice with higher priority
       diceElements.container = container;
 
       // Wrapper
@@ -694,66 +741,89 @@ class TinyDices {
       wrapper.style.setProperty('--rotX', `${rotX}deg`);
       wrapper.style.setProperty('--rotY', `${rotY}deg`);
 
-      // Create the cube
-      const sequence = [];
-      const countSeq = new Set();
-      const min = !canZero ? 0 : -1;
-      for (let i = 1; i <= 6; i++) {
-        // Element
-        const face = document.createElement('div');
-        face.className = `face face${i}`;
-        tinyDice.#updateDiceFaceSkin(face);
+      /**
+       *  Create the cube
+       * @param {boolean} [isFinal=false]
+       */
+      const rollDice = (isFinal = false) => {
+        const sequence = [];
+        const countSeq = new Set();
+        const min = !canZero ? 0 : -1;
 
-        // Ignored results
-        if (i !== 1) {
-          let roll;
-          // Normal max
-          if (max > min) {
-            let extraValue = min;
-            let usingExtra = false;
-            do {
-              roll = !usingExtra ? tinyDice.#rollNumber(max, canZero) : extraValue;
-              if (usingExtra || sequence.length >= max) {
-                if (extraValue >= max) {
-                  extraValue = min;
-                  countSeq.clear();
+        diceElements.faces = [];
+        wrapper.textContent = '';
+        for (let i = 1; i <= 6; i++) {
+          // Element
+          const face = document.createElement('div');
+          face.className = `face face${i}`;
+          this.#updateDiceFaceSkin(face);
+
+          // Ignored results
+          if (i !== 1 || !isFinal) {
+            let roll;
+            // Normal max
+            if (max > min) {
+              let extraValue = min;
+              let usingExtra = false;
+              do {
+                roll = !usingExtra ? this.#rollNumber(max, canZero) : extraValue;
+                if (usingExtra || sequence.length >= max) {
+                  if (extraValue >= max) {
+                    extraValue = min;
+                    countSeq.clear();
+                  }
+                  extraValue++;
+                  usingExtra = true;
                 }
-                extraValue++;
-                usingExtra = true;
-              }
-            } while (countSeq.has(roll));
-          }
-          // 0 or negative max
-          else roll = max;
+              } while (countSeq.has(roll));
+            }
+            // 0 or negative max
+            else roll = max;
 
-          // Insert sequence
-          if (roll < 1) roll = 0;
-          sequence.push(roll);
-          countSeq.add(roll);
-          face.textContent = String(roll);
+            // Insert sequence
+            if (roll < 1) roll = 0;
+            sequence.push(roll);
+            countSeq.add(roll);
+            face.textContent = String(roll);
+          }
+          // The result!
+          else {
+            face.textContent = String(result);
+            sequence.push(result);
+            countSeq.add(result);
+          }
+          // Side added
+          wrapper.appendChild(face);
+          diceElements.faces.push(face);
         }
-        // The result!
-        else {
-          face.textContent = String(result);
-          sequence.push(result);
-          countSeq.add(result);
-        }
-        // Side added
-        wrapper.appendChild(face);
-        diceElements.faces.push(face);
-      }
+        return sequence;
+      };
+
+      // The sequence
+      let sequence = rollDice();
 
       // Stop cube animation
-      if (!rollInfinity) {
-        setTimeout(() => {
-          if (wrapper) wrapper.classList.add('stopped');
-        }, 2000);
-      }
+      let continueAnimation = true;
+      const stop = () => {
+        continueAnimation = false;
+        if (wrapper) wrapper.classList.add('stopped');
+        sequence = rollDice(true);
+      };
+
+      /** @type {NodeJS.Timeout|null} */
+      let stopTimeout = null;
+      if (!rollInfinity) stopTimeout = setTimeout(stop, this.#stopTime);
+
+      const rdChanges = this.#stopTime / this.#rdChangerAmount;
+      const continueAnim = () => {
+        if (continueAnimation) setTimeout(continueAnim, rdChanges);
+        sequence = rollDice();
+      };
 
       // Insert the cube
       container.appendChild(wrapper);
-      tinyDice.#addElement(diceElements);
-      return { cube: container, sequence };
+      this.#addElement(diceElements);
+      return { result, cube: container, sequence, stop, reRollDice: rollDice, stopTimeout };
     };
   }
 
