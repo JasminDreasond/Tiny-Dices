@@ -1,7 +1,7 @@
 {
   "name": "tiny-dices",
   "description": "Tiny Dices adds a sprinkle of fun and a touch of magic to your dice-rolling adventures — fully customizable with CSS and JavaScript to match your style, theme, or imagination! 🎲✨",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -16,8 +16,7 @@
   "author": "Yasmin Seidel (JasminDreasond)",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "tiny-essentials": "^1.20.0",
-    "validate-color": "^2.2.4"
+    "tiny-essentials": "^1.24.0"
   },
   "keywords": [
     "dice-roller",

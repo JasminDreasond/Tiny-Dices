@@ -1,5 +1,4 @@
-import { isJsonObject } from 'tiny-essentials';
-import validateColor from 'validate-color';
+import { isJsonObject, TinyColorValidator } from 'tiny-essentials';
 
 /**
  * TinyDices - JavaScript class for rendering animated 3D dice with HTML/CSS.
@@ -284,13 +283,13 @@ class TinyDices {
         continue;
       }
 
-      if (validateColor(part.trim())) {
+      if (!!TinyColorValidator.isColor(part.trim())) {
         colorCount++;
       } else {
         // Extract possible color value before any stop (e.g. "red 20%" → "red")
         const colorCandidate = part.trim().split(/\s+/)[0];
 
-        if (validateColor(colorCandidate)) {
+        if (!!TinyColorValidator.isColor(colorCandidate)) {
           colorCount++;
         } else {
           return false; // invalid color
@@ -337,7 +336,7 @@ class TinyDices {
     if (!validStyles.includes(style)) return false;
 
     // Validate color (either direct or linear-gradient)
-    return validateColor(color) || this.#isValidLinearGradient(color);
+    return !!TinyColorValidator.isColor(color) || this.#isValidLinearGradient(color);
   }
 
   /**
@@ -377,7 +376,7 @@ class TinyDices {
 
     const trimmed = skin.trim();
     const isGradient = this.#isValidLinearGradient(trimmed);
-    const isColor = validateColor(trimmed);
+    const isColor = !!TinyColorValidator.isColor(trimmed);
 
     this.#bgSkin = isGradient || isColor ? trimmed : null;
   }
@@ -395,7 +394,7 @@ class TinyDices {
    * @param {string|null} skin - The skin name to apply to the text. Pass null or non-string to reset to default.
    */
   setTextSkin(skin) {
-    this.#textSkin = typeof skin === 'string' && validateColor(skin) ? skin : null;
+    this.#textSkin = typeof skin === 'string' && !!TinyColorValidator.isColor(skin) ? skin : null;
   }
 
   /**
@@ -437,7 +436,7 @@ class TinyDices {
 
     const trimmed = skin.trim();
     const isGradient = this.#isValidLinearGradient(trimmed);
-    const isColor = validateColor(trimmed);
+    const isColor = !!TinyColorValidator.isColor(trimmed);
 
     this.#selectionBgSkin = isGradient || isColor ? trimmed : null;
   }
@@ -460,7 +459,7 @@ class TinyDices {
    * @param {string} skin - The text color for selected dice.
    */
   setSelectionTextSkin(skin) {
-    this.#selectionTextSkin = typeof skin === 'string' && validateColor(skin) ? skin : null;
+    this.#selectionTextSkin = typeof skin === 'string' && !!TinyColorValidator.isColor(skin) ? skin : null;
   }
 
   /**
