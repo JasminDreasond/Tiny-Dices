@@ -62,7 +62,6 @@ import { isJsonObject, TinyColorValidator } from 'tiny-essentials';
  * dice.getBorderSkin();                   // Gets current or default border skin
  */
 class TinyDices {
-
   /**
    * Stores all current dice elements created by the instance.
    *
@@ -76,7 +75,7 @@ class TinyDices {
   #cubeId = 0; // used for incremental z-index to avoid overlapping issues
   #destroyed = false;
   #stopTime = 2000;
-  #rdChangerAmount = 500;
+  #rdChangerAmount = 1000;
 
   /** @type {string|null} */ #defaultBgSkin = 'linear-gradient(135deg, #ff3399, #33ccff)';
   /** @type {string|null} */ #defaultBorderSkin = '2px solid rgba(255, 255, 255, 0.2)';
@@ -820,10 +819,15 @@ class TinyDices {
       // The sequence
       let sequence = rollDice();
 
+      /** @type {NodeJS.Timeout|null} */
+      let rollProgress = null;
+
       // Stop cube animation
       let continueAnimation = true;
       const stop = () => {
         continueAnimation = false;
+        if (rollProgress) clearTimeout(rollProgress);
+        rollProgress = null;
         if (wrapper) wrapper.classList.add('stopped');
         sequence = rollDice(true);
       };
@@ -834,7 +838,7 @@ class TinyDices {
 
       const rdChanges = this.#stopTime / this.#rdChangerAmount;
       const continueAnim = () => {
-        if (continueAnimation) setTimeout(continueAnim, rdChanges);
+        if (continueAnimation) rollProgress = setTimeout(continueAnim, rdChanges);
         sequence = rollDice();
       };
 
@@ -844,8 +848,6 @@ class TinyDices {
       return { cube: container, sequence, stop, reRollDice: rollDice, stopTimeout };
     };
   }
-
-
 
   /**
    * Inserts a single die cube into the DOM using the specified configuration.
