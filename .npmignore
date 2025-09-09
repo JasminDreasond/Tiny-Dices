@@ -8,6 +8,7 @@ babel.config.json
 rollup.config.mjs
 tsconfig.json
 img
+changelog
 
 # Logs
 logs
