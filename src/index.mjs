@@ -938,13 +938,8 @@ class TinyDices {
    * Checks whether the TinyDices instance has been destroyed.
    *
    * @returns {boolean} - Returns `true` if the instance was destroyed, otherwise `false`.
-   *
-   * @example
-   * if (dice.isDestroyed()) {
-   *   console.warn('This instance is no longer usable.');
-   * }
    */
-  isDestroyed() {
+  get destroyed() {
     return this.#destroyed;
   }
 
