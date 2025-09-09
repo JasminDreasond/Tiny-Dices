@@ -101,7 +101,15 @@ const sequence = dice.insertDiceElement(4, 6, false, true);
 | `canZero` | `boolean` | Whether face value can be 0. |
 | `rollInfinity` | `boolean` | Whether the die rolls forever. |
 
-Returns: `number[]` – The randomized sequence of values assigned to the six faces.
+Returns: `PreDiceResult` – The randomized sequence of values assigned to the six faces.
+```ts
+{
+  sequence: number[]                     // array of 6 values for each face
+  reRollDice: () => number[],        // Function that re-rolls the dice and returns the new sequence
+  stop: () => void,                  // Function that stops the dice rolling
+  stopTimeout: NodeJS.Timeout|null       // Reference to the timeout controlling the dice stop, or null if not set.
+}
+```
 
 🎲 Each die gets animated, rendered, and z-stacked dynamically.
 

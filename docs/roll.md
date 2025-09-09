@@ -22,8 +22,11 @@ const results = dice.roll("6, 10, 12", false, true);
 Returns:  
 ```ts
 Array<{
-  result: number,       // front-facing die result
-  sequence: number[]    // array of 6 values for each face
+  result: number,                        // front-facing die result
+  sequence: number[]                     // array of 6 values for each face
+  reRollDice: function: number[],        // Function that re-rolls the dice and returns the new sequence
+  stop: function: void,                  // Function that stops the dice rolling
+  stopTimeout: NodeJS.Timeout|null       // Reference to the timeout controlling the dice stop, or null if not set.
 }>
 ```
 
@@ -52,8 +55,11 @@ const { result, sequence } = dice.rollDice(20, false, true);
 Returns:  
 ```ts
 {
-  result: number,       // the front-facing result
-  sequence: number[]    // all 6 face values in die order
+  result: number,                        // the front-facing result
+  sequence: number[],                    // all 6 face values in die order
+  reRollDice: () => number[],            // Function that re-rolls the dice and returns the new sequence
+  stop: () => void,                      // Function that stops the dice rolling
+  stopTimeout: NodeJS.Timeout|null       // Reference to the timeout controlling the dice stop, or null if not set.
 }
 ```
 
@@ -79,8 +85,11 @@ const results = dice.rollDices([6, 8, 10], true);
 Returns:  
 ```ts
 Array<{
-  result: number,       // front-facing value of each die
-  sequence: number[]    // the full sequence of six values per die
+  result: number,                    // front-facing value of each die
+  sequence: number[],                // the full sequence of six values per die
+  reRollDice: function: number[],        // Function that re-rolls the dice and returns the new sequence
+  stop: function: void,                  // Function that stops the dice rolling
+  stopTimeout: NodeJS.Timeout|null   // Reference to the timeout controlling the dice stop, or null if not set.
 }>
 ```
 

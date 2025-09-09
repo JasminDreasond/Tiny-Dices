@@ -926,7 +926,7 @@ class TinyDices {
    * @param {string|Array<number>} perDieInput - Either a comma-separated string or array of max values per die.
    * @param {boolean} [canZero=false] - Whether 0 is a valid result.
    * @param {boolean} [rollInfinity=false] - Whether dice spin infinitely.
-   * @returns {Array<{ result: number, sequence?: number[] }>} - Array with results and face sequences for each die.
+   * @returns {Array<DiceResult>} - Array with results and face sequences for each die.
    */
   roll(perDieInput, canZero = false, rollInfinity = false) {
     const perDieData = this.parseRollConfig(perDieInput);
