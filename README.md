@@ -1,4 +1,5 @@
 <div align="center">
+<img src="./img/tiny-dices.jpg" alt="banner" />
 <p>
     <a href="https://discord.gg/TgHdvJd"><img src="https://img.shields.io/discord/413193536188579841?color=7289da&logo=discord&logoColor=white" alt="Discord server" /></a>
     <a href="https://www.npmjs.com/package/tiny-dices"><img src="https://img.shields.io/npm/v/tiny-dices.svg?maxAge=3600" alt="NPM version" /></a>
@@ -62,7 +63,7 @@ This project was initially a custom dice application from Pony Driland repositor
     dice.roll([10, 10], true); // Rolls 2d10 starting from 0 🥳🎲
     ```
 
-  - 🧪 Roll a custom set of dice with zero and infinity:
+  - 🧪 Roll a custom set of dice with zero and infinity:md-assets/tiny-crypto-suite.jpg
 
     ```js
     dice.roll([4, 8, 6], true, true); // Rolls d4, d8, and d6 from 0 with infinite spin ⚙️🎲
